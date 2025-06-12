@@ -60,7 +60,28 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn(
+      // Default padding
+      "p-6 pt-0",
+
+      // Y-axis scrolling only when needed
+      "overflow-y-auto",
+
+      // Prevent horizontal scroll
+      "overflow-x-hidden",
+
+      // Limit height for scrolling to activate
+      "max-h-[500px]",
+
+      // Make it responsive
+      "w-full",
+
+      className
+    )}
+    {...props}
+  />
 ))
 CardContent.displayName = "CardContent"
 
@@ -76,4 +97,11 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent
+}

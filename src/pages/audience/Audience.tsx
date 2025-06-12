@@ -115,45 +115,80 @@ const Audience = () => {
                 </CardContent>
               </Card>
               
-              <Card className="border shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>Top Followers</CardTitle>
-                    <CardDescription>Your most engaged followers</CardDescription>
-                  </div>
-                  <Button variant="ghost" className="text-sm">
-                    View all
-                    <ChevronRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Engagement</TableHead>
-                        <TableHead>Country</TableHead>
-                        <TableHead>Joined</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {topFollowers.map((follower) => (
-                        <TableRow key={follower.id}>
-                          <TableCell className="font-medium flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">
-                              {follower.name.charAt(0).toUpperCase()}
-                            </div>
-                            <span>{follower.name}</span>
-                          </TableCell>
-                          <TableCell>{follower.engagement}</TableCell>
-                          <TableCell>{follower.country}</TableCell>
-                          <TableCell>{follower.joined}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
+            <Card className="border shadow-sm">
+  <CardHeader className="flex flex-row items-center justify-between">
+    <div>
+      <CardTitle>Top Followers</CardTitle>
+      <CardDescription>Your most engaged followers</CardDescription>
+    </div>
+    <Button variant="ghost" className="text-sm">
+      View all
+      <ChevronRight className="ml-1 h-4 w-4" />
+    </Button>
+  </CardHeader>
+
+  <CardContent className="max-h-[500px] overflow-y-auto">
+    {/* Desktop Table */}
+    <div className="hidden md:block w-full overflow-x-auto">
+      <Table className="min-w-full table-fixed">
+        <TableHeader>
+          <TableRow>
+            <TableHead>User</TableHead>
+            <TableHead>Engagement</TableHead>
+            <TableHead>Country</TableHead>
+            <TableHead>Joined</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {topFollowers.map((follower) => (
+            <TableRow key={follower.id}>
+              <TableCell className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">
+                  {follower.name.charAt(0).toUpperCase()}
+                </div>
+                <span>{follower.name}</span>
+              </TableCell>
+              <TableCell>{follower.engagement}</TableCell>
+              <TableCell>{follower.country}</TableCell>
+              <TableCell>{follower.joined}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+
+    {/* Mobile Card View */}
+    <div className="md:hidden space-y-4">
+      {topFollowers.map((follower) => (
+        <div
+          key={follower.id}
+          className="border rounded-lg p-4 shadow-sm bg-white space-y-2"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">
+              {follower.name.charAt(0).toUpperCase()}
+            </div>
+            <span className="font-medium">{follower.name}</span>
+          </div>
+          <div>
+            <span className="text-sm text-muted-foreground">Engagement: </span>
+            {follower.engagement}
+          </div>
+          <div>
+            <span className="text-sm text-muted-foreground">Country: </span>
+            {follower.country}
+          </div>
+          <div>
+            <span className="text-sm text-muted-foreground">Joined: </span>
+            {follower.joined}
+          </div>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
+
+
             </TabsContent>
 
             <TabsContent value="demographics" className="space-y-4">

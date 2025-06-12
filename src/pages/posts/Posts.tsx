@@ -152,112 +152,143 @@ const Posts = () => {
           <CreateButton text="+ Create New Posts"></CreateButton>
         </div>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <CardTitle>Content Library</CardTitle>
-                <CardDescription>
-                  View and manage all your social media posts
-                </CardDescription>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Button 
-                  variant={filter === "all" ? "default" : "outline"} 
-                  size="sm" 
-                  onClick={() => setFilter("all")}
-                >
-                  All
+       <Card>
+  <CardHeader className="pb-3">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <CardTitle>Content Library</CardTitle>
+        <CardDescription>
+          View and manage all your social media posts
+        </CardDescription>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <Button variant={filter === "all" ? "default" : "outline"} size="sm" onClick={() => setFilter("all")}>All</Button>
+        <Button variant={filter === "published" ? "default" : "outline"} size="sm" onClick={() => setFilter("published")}>Published</Button>
+        <Button variant={filter === "scheduled" ? "default" : "outline"} size="sm" onClick={() => setFilter("scheduled")}>Scheduled</Button>
+        <Button variant={filter === "draft" ? "default" : "outline"} size="sm" onClick={() => setFilter("draft")}>Drafts</Button>
+      </div>
+    </div>
+  </CardHeader>
+
+  <CardContent className="max-h-[500px] overflow-y-auto">
+    {/* Desktop Table */}
+    <div className="hidden md:block overflow-x-auto">
+      <div className="min-w-[700px] rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[350px]">Post</TableHead>
+              <TableHead>Platform</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Engagement</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredPosts.map((post) => (
+              <TableRow key={post.id}>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                    {post.title}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={`capitalize ${getPlatformColor(post.platform)}`}>
+                    {post.platform}
+                  </Badge>
+                </TableCell>
+                <TableCell>{new Date(post.date).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <Badge variant={getStatusVariant(post.status)} className="capitalize">
+                    {post.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  {post.engagement !== undefined ? post.engagement : "-"}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Actions</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem>View Details</DropdownMenuItem>
+                      <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                      {post.status === "scheduled" && (
+                        <DropdownMenuItem>Reschedule</DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-red-500">Delete Post</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+
+    {/* Mobile Cards */}
+    <div className="md:hidden space-y-4">
+      {filteredPosts.map((post) => (
+        <div key={post.id} className="rounded-md border p-4 shadow-sm space-y-2 bg-white">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            {post.title}
+          </div>
+          <div className="text-sm">
+            <span className="text-muted-foreground">Platform: </span>
+            <Badge variant="outline" className={`capitalize ${getPlatformColor(post.platform)}`}>
+              {post.platform}
+            </Badge>
+          </div>
+          <div className="text-sm">
+            <span className="text-muted-foreground">Date: </span>
+            {new Date(post.date).toLocaleDateString()}
+          </div>
+          <div className="text-sm">
+            <span className="text-muted-foreground">Status: </span>
+            <Badge variant={getStatusVariant(post.status)} className="capitalize">
+              {post.status}
+            </Badge>
+          </div>
+          <div className="text-sm">
+            <span className="text-muted-foreground">Engagement: </span>
+            {post.engagement !== undefined ? post.engagement : "-"}
+          </div>
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Actions</span>
                 </Button>
-                <Button 
-                  variant={filter === "published" ? "default" : "outline"} 
-                  size="sm"
-                  onClick={() => setFilter("published")}
-                >
-                  Published
-                </Button>
-                <Button 
-                  variant={filter === "scheduled" ? "default" : "outline"} 
-                  size="sm"
-                  onClick={() => setFilter("scheduled")}
-                >
-                  Scheduled
-                </Button>
-                <Button 
-                  variant={filter === "draft" ? "default" : "outline"} 
-                  size="sm"
-                  onClick={() => setFilter("draft")}
-                >
-                  Drafts
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[350px]">Post</TableHead>
-                    <TableHead>Platform</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Engagement</TableHead>
-                    <TableHead className="w-[50px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredPosts.map((post) => (
-                    <TableRow key={post.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                          {post.title}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={`capitalize ${getPlatformColor(post.platform)}`}>
-                          {post.platform}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {new Date(post.date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusVariant(post.status)} className="capitalize">
-                          {post.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {post.engagement !== undefined ? post.engagement : "-"}
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Actions</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Edit Post</DropdownMenuItem>
-                            {post.status === "scheduled" && (
-                              <DropdownMenuItem>Reschedule</DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-500">Delete Post</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem>View Details</DropdownMenuItem>
+                <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                {post.status === "scheduled" && (
+                  <DropdownMenuItem>Reschedule</DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-red-500">Delete Post</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
+
       </div>
     </Layout>
   );
