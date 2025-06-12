@@ -10,7 +10,7 @@ import { SidebarProvider } from "./UseContext/SidebarContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { MdError } from "react-icons/md";
+
 
 const queryClient = new QueryClient();
 
@@ -48,7 +48,7 @@ function RootComponent() {
         padding: '20px',
         textAlign: 'center'
       }}>
-        <MdError className="text-[200px] text-red-500" />
+      
         <h1>No Internet Connection</h1>
         <p>Please check your network connection and try again.</p>
         <button
